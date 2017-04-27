@@ -11,7 +11,7 @@ public class DBCPConnectionDataSource extends org.apache.tomcat.jdbc.pool.DataSo
     public static final String MYSQL_ADDRESS_PROP_NAME ="JDBC_CONNECTION_STRING";
     public static final String JDBC_MAX_ACTIVE_CONNECTIONS ="JDBC_MAX_ACTIVE_CONNECTIONS";
 
-    private static final String URL = "jdbc:mysql://$OPENSHIFT_MYSQL_DB_HOST:$OPENSHIFT_MYSQL_DB_PORT/envite?user=adminHF3HitN&password=bhWDcIIxajAQ&useUnicode=true&characterEncoding=utf-8";
+    private static final String URL = "jdbc:mysql://127.12.181.1:3306/envite?user=adminHF3HitN&password=bhWDcIIxajAQ&useUnicode=true&characterEncoding=utf-8";
 
     public void configureUrl() {
         super.setUrl(URL);
