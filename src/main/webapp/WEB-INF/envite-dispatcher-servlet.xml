@@ -1,0 +1,94 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/data/jpa
+        http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
+        http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="com.envite"/>
+    <jpa:repositories base-package="com.envite.repositories" />
+
+    <!-- Factory bean that creates the Mongo instance -->
+    <bean id="mongo" class="org.springframework.data.mongodb.core.MongoFactoryBean">
+        <property name="host" value="localhost" />
+    </bean>
+
+    <!-- MongoTemplate for connecting and querying the documents in the database -->
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg ref="mongo" />
+        <constructor-arg value="srhmongodatabase" />
+    </bean>
+    <mongo:repositories base-package="com.envite.mongo.repositories" />
+
+    <!-- Use this post processor to translate any MongoExceptions thrown in @Repository annotated classes -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix">
+            <value>/WEB-INF/pages/</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+    </bean>
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages" />
+        <property name="defaultEncoding" value="UTF-8" />
+    </bean>
+
+    <bean id="dataSource" class="com.envite.utils.DBCPConnectionDataSource" destroy-method="close" init-method="configureUrl">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="true" />
+        <property name="testOnReturn" value="false" />
+        <property name="validationQuery" value="SELECT 1" />
+        <property name="validationInterval" value="30000" />
+        <property name="timeBetweenEvictionRunsMillis" value="5000" />
+        <property name="minIdle" value="10" />
+        <property name="maxIdle" value="10" />
+        <property name="maxWait" value="10000" />
+        <property name="initialSize" value="10" />
+        <property name="removeAbandonedTimeout" value="60" />
+        <property name="removeAbandoned" value="true" />
+        <property name="logAbandoned" value="true" />
+        <property name="minEvictableIdleTimeMillis" value="30000" />
+        <property name="jmxEnabled" value="true" />
+        <property name="abandonWhenPercentageFull" value="75"/>
+        <property name="jdbcInterceptors"
+                  value="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;
+	                     org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer;
+	                     org.apache.tomcat.jdbc.pool.interceptor.SlowQueryReportJmx(threshold=5000)" />
+    </bean>
+
+    <tx:annotation-driven />
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+        </property>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="false" />
+                <property name="generateDdl" value="false" />
+            </bean>
+        </property>
+    </bean>
+
+</beans>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/security
+	http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+
+    <http pattern="/index.jsp" security="none" />
+
+    <global-method-security secured-annotations="enabled" />
+
+	<http>
+		<intercept-url pattern="/welcome*" access="ROLE_USER" />
+		<!--<form-login login-page="/login" default-target-url="/list" authentication-failure-url="/accessdenied" />-->
+        <form-login login-page="/login" authentication-details-source-ref="loginDataSource" default-target-url="/welcome" always-use-default-target="true"/>
+		<logout logout-success-url="/" />
+	</http>
+
+    <beans:bean id="loginDataSource" class="com.envite.security.UserWebAuthenticationDetailsSource"/>
+	<beans:bean id="authenticationUserDetailsService" class="com.envite.security.AuthenticationUserDetailsService"/>
+	<beans:bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+		<!--<beans:property name="hideUserNotFoundExceptions" value="false" />-->
+		<beans:property name="userDetailsService" ref="authenticationUserDetailsService"/>
+		<!--<beans:property name="passwordEncoder" ref="encoder"/>-->
+	</beans:bean>
+
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider ref="daoAuthenticationProvider">
+			<!--<user-service>
+				<user name="admin" password="admin" authorities="ROLE_USER" />
+			</user-service>-->
+		</authentication-provider>
+	</authentication-manager>
+
+
+</beans:beans>
