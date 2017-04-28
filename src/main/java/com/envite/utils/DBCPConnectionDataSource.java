@@ -16,8 +16,11 @@ public class DBCPConnectionDataSource extends org.apache.tomcat.jdbc.pool.DataSo
     public void configureUrl() {
         super.setUrl(URL);
         String configUrl = System.getProperty(MYSQL_ADDRESS_PROP_NAME);
+        logger.error("URL " + configUrl);
         if(!StringUtils.isEmpty(configUrl)){
             super.setUrl(configUrl);
+        } else {
+            logger.error("env " + System.getenv(MYSQL_ADDRESS_PROP_NAME));
         }
         String maxActiveConnections = System.getProperty(JDBC_MAX_ACTIVE_CONNECTIONS);
         if(!StringUtils.isEmpty(maxActiveConnections)){
