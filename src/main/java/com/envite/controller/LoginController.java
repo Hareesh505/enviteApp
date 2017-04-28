@@ -91,7 +91,7 @@ public class LoginController {
                 UserDO userDO = userService.getCurrentUserDO();
                 model.put("userJSON", userDO);
             } catch (Exception ex){
-                logger.error("exception while authenticate " , ex);
+                logger.error("exception while authenticate " + ex.getMessage() , ex);
                 model.put("error",ex.getMessage());
             }
         } else {

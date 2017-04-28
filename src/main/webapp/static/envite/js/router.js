@@ -30,7 +30,7 @@ define([
                         } else {
                             this.appStart = true;
                             var userJSON = window.userJSON = response.userJSON;
-                            if (selected === "login" || selected === "signup") {
+                            if (!selected || selected === "login" || selected === "signup") {
                                 selected = "dashboard";
                                 window.router.navigate('#dashboard');
                             }
