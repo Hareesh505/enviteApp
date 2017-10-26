@@ -64,6 +64,23 @@ public class UserServiceImpl implements UserService {
         return returnMap;
     }
 
+    @Override
+    public Map<String, Object> updateUserDetails(String firstName, String lastName, String phoneNumber, String email, UserDO userDO){
+        Map<String,Object> returnMap = new HashMap();
+        User user = findByUserName(userDO.getUserName());
+        if(user != null){
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setPhoneNumber(phoneNumber);
+            user.setEmail(email);
+            userRepository.save(user);
+            returnMap.put("userJSON", new UserDO(user));
+        } else {
+            returnMap.put("error","User Not available");
+        }
+        return  returnMap;
+    }
+
     /**
      * Get current user details.
      * User Id, user name and user role.<br>

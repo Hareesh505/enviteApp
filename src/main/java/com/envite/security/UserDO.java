@@ -22,6 +22,10 @@ public class UserDO implements Serializable {
         this.status = user.getStatus();
         this.modifiedDate = user.getModifiedDate();
         this.phoneNumber = user.getPhoneNumber();
+        this.fullName = user.getFirstName();
+        if(user.getLastName() != null) {
+            this.fullName += user.getLastName();
+        }
     }
     private Long userId;
 
@@ -44,4 +48,6 @@ public class UserDO implements Serializable {
     private Boolean status;
 
     private String currentUserRole;
+
+    private String fullName;
 }

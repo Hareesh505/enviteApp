@@ -46,20 +46,17 @@ define([
             this.appStart = true;
             var $body = $('body');
             if(selected !== "login" && selected !== "signup"){
-                var $content = $("#container");
-                $content.empty();
-                this.mainView && this.mainView.close();
+                $body.empty();
                 var mainView = new MainView({
-                    el: $("<div/>").appendTo($content),
+                    el: $("<div/>").appendTo($body),
                     shellView: this.shellView
                 });
-                this.mainView = mainView;
                 mainView.selected = selected;
                 mainView.render();
             } else {
                 switch (selected) {
                     case 'login':
-                        $body.find('#container').html('<div class="login-view"></div>');
+                        $body.html('<div class="login-view"></div>');
                         require(['envite/js/app/views/loginView'], $.proxy(function(LoginView){
                             // Set the layout
                             var loginView = new LoginView({
@@ -70,7 +67,7 @@ define([
                         }, this));
                         break;
                     case 'signup':
-                        $body.find('#container').html('<div class="signup-view"></div>');
+                        $body.html('<div class="signup-view"></div>');
                         require(['envite/js/app/views/signupView'], $.proxy(function (SignupView) {
                             var signupModel = new Backbone.Model({
                                 'mode': '',

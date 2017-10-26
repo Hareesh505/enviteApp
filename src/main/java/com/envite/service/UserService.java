@@ -15,4 +15,6 @@ public interface UserService {
     Map<String, Object> registerUser(String userName, String password, String fullName);
 
     UserDO getCurrentUserDO();
+
+    Map<String, Object> updateUserDetails(String firstName, String lastName, String phoneNumber, String email, UserDO userDO);
 }
