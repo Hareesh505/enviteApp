@@ -1,0 +1,8 @@
+target/
+.DS_Store
+.settings/*.prefs
+.classpath
+/bin
+.idea
+dump.rdb
+/jshint_error.log
